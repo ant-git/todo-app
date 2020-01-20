@@ -8,10 +8,17 @@ class ModelTests(TestCase):
         """Test creating a new user with an email successful"""
         email = "test@antdev.com"
         password = "Testpass123"
-        user = get_user_model().object.create_user(
+        user = get_user_model().objects.create_user(
             email=email,
             password=password
         )
 
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password))
+
+    def test_new_user_email_normalized(self):
+        """Test the email for a new user is normalized"""
+        email = 'test@ANT.com'
+        user = get_user_model().objects.create_user(email, 'test123')
+
+        self.assertEqual(user.email, email.lower())
